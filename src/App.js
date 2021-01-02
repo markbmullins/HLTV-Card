@@ -1,92 +1,110 @@
-import logo from "./logo.svg";
 import "./App.scss";
-
-const Player = ({ url, profile, name }) => {
+import { useState, useEffect } from "react";
+const NameBadge = ({ team: { position, logoUrl, statsPage, name } }) => {
   return (
-    <div className="player-card flex-cl-center">
-      <a target="_blank" href={profile}>
-        <img src={url} />
+    <div className="name-badge">
+      <a target="_blank" rel="noreferrer" href={statsPage}>
+        <div className="box flex-rw">
+          <div className="circle flex-rw-ctr">{position}</div>
+          <img src={logoUrl} alt={name} />
+          <h1>{name}</h1>
+        </div>
+      </a>
+    </div>
+  );
+};
+
+const RosterList = ({ team }) => {
+  const { core, rest } = team;
+  return (
+    <div className="roster-container flex-rw">
+      <div className="core-container flex-cl-ctr">
+        <div className="core-text">Core</div>
+        <div className="flex-rw">
+          {core && core.map((player) => <PlayerCard key={player.name} player={player} />)}
+        </div>
+      </div>
+
+      <div className="rest-container flex-rw">
+        {rest && rest.map((player) => <PlayerCard key={player.name} player={player} />)}
+      </div>
+    </div>
+  );
+};
+
+const PlayerCard = ({ player: { url, profile, name } }) => {
+  return (
+    <div className="player-card flex-cl-ctr">
+      <a target="_blank" rel="noreferrer" href={profile}>
+        <img src={url} alt={`${name}'s profile`} />
       </a>
       <div>{name}</div>
     </div>
   );
 };
 
-const Roster = ({ team }) => {
+const AchievementsCard = ({ placings }) => {
   return (
-    <div className="player-imgs flex-rw-center">
-      <div className="core flex-rw">
-        <div>Core</div>
-      </div>
-      {team.core.map(({ url, profile, name }) => (
-        <Player url={url} profile={profile} name={name} />
-      ))}
-      {team.rest.map(({ url, profile, name }) => (
-        <Player url={url} profile={profile} name={name} />
-      ))}
-    </div>
-  );
-};
-
-const TeamCard = ({ position, logoUrl, statsPage }) => {
-  return (
-    <div className="team-card">
-      <a target="_blank" href={statsPage}>
-        <div className="box flex-rw">
-          <div className="circle flex-rw-center">{position}</div>
-          <img src={logoUrl} />
-          <h1>Heroic</h1>
-        </div>
-      </a>
-    </div>
-  );
-};
-
-const Achievements = ({ placings }) => {
-  return (
-    <div className="achievements flex-cl-center">
+    <a
+      className="achievements-container flex-cl-ctr"
+      target="_blank"
+      href="https://www.hltv.org/stats/teams/events/7175/heroic"
+      rel="noreferrer">
       <div>ACHIEVEMENTS (LAN)</div>
-      <div className="item flex-rw">
-        <img src="https://i.imgur.com/eo6jufJ.png" />
+      <div className="achievement flex-rw">
+        <img src="https://i.imgur.com/eo6jufJ.png" alt="1st place trophy" />
         <div>1st</div>
         <div>{placings.first}</div>
       </div>
-      <div className="item flex-rw">
-        <img src="https://i.imgur.com/0HpiWyN.png" />
+      <div className="achievement flex-rw">
+        <img src="https://i.imgur.com/0HpiWyN.png" alt="2nd place trophy" />
         <div>2nd</div>
         <div>{placings.second}</div>
       </div>
-      <div className="item flex-rw">
-        <img src="https://i.imgur.com/wSd9GcO.png" />
+      <div className="achievement flex-rw">
+        <img src="https://i.imgur.com/wSd9GcO.png" alt="3rd and 4th place trophy" />
         <div>3rd-4th</div>
         <div>{placings.third}</div>
       </div>
-    </div>
+    </a>
   );
 };
-const Card = (props) => {
-  const team = getTeamInfo();
-  return (
-    <div className="container flex-rw-center">
-      <div className="card">
-        <div className="card-info">
-          <div className="team">
-            <TeamCard position={team.position} logoUrl={team.logoUrl} statsPage={team.statsPage} />
-            <Roster team={team} />
-          </div>
-          <div className="flex-cl prize-achievements">
-            <div className="prize-money flex-cl-center">
-              <a target="_blank" href="https://www.hltv.org/stats/teams/events/7175/heroic">
-                <div>Prize Money</div>
-                <div>{team.prizeMoney}</div>
-              </a>
-            </div>
 
-            <Achievements placings={team.placings} />
+const TeamCard = () => {
+  const [team, setTeam] = useState();
+
+  useEffect(() => {
+    getTeamInfo().then((team) => setTeam(team));
+  }, []);
+
+  if (!team) return <div>Loading...</div>;
+
+  return (
+    <div className="card-container flex-rw-ctr">
+      <div className="card">
+        <div className="flex-rw">
+          <div className="name-roster-container">
+            <NameBadge team={team} />
+            <RosterList team={team} />
+          </div>
+          <div className="flex-cl prize-achievements-container">
+            <a
+              target="_blank"
+              href="https://www.hltv.org/stats/teams/events/7175/heroic"
+              rel="noreferrer"
+              className="prize-money flex-cl-ctr">
+              <div>Prize Money</div>
+              <div>{team.prizeMoney}</div>
+            </a>
+
+            <AchievementsCard placings={team.placings} />
           </div>
         </div>
         <div className="graph">
-          <img src="https://i.imgur.com/DryrBuN.png" />
+          <img
+            src="https://i.imgur.com/DryrBuN.png"
+            alt={`${team.name}'s ranking progression 2020`}
+          />
         </div>
       </div>
     </div>
@@ -94,7 +112,8 @@ const Card = (props) => {
 };
 
 function getTeamInfo() {
-  return {
+  return Promise.resolve({
+    name: "Heroic",
     placings: {
       first: "2 (0)",
       second: "1 (0)",
@@ -150,7 +169,7 @@ function getTeamInfo() {
         profile: "https://www.hltv.org/stats/players/922/snappi",
       },
     ],
-  };
+  });
 }
 
-export default Card;
+export default TeamCard;
