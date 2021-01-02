@@ -1,0 +1,182 @@
+$height: 398px;
+$width: 800px;
+$graph-bg: #1f2b39;
+$border-color: #414c5a;
+$team-bg: #323e4c;
+$circle-color: #4c6689;
+$core-bg: #222c38;
+
+body {
+  font-family: Open Sans, sans-serif;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: $height;
+  margin: 10% 0;
+}
+
+.card {
+  width: $width;
+  .card-info {
+    display: flex;
+    max-height: $height/2;
+  }
+
+  .graph {
+    background-color: $graph-bg;
+    img {
+      width: 100%;
+    }
+  }
+
+  .team {
+    background-color: $team-bg;
+    width: 66%;
+    border-bottom: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+    .team-card {
+      height: 40%;
+      margin: 20px 10px 10px 10px;
+
+      h1 {
+        color: white;
+        font-size: 1.3rem;
+      }
+
+      .box {
+        background: linear-gradient(to right, #384c60, $team-bg);
+        max-height: 45px;
+        align-items: center;
+        width: 75%;
+      }
+
+      .circle {
+        border-radius: 50%;
+        background-color: $circle-color;
+        height: 60px;
+        width: 60px;
+        color: white;
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
+
+      img {
+        max-height: 60px;
+        margin: 0px 5px;
+        margin-top: 5px;
+      }
+    }
+  }
+
+  .core {
+    background-color: $core-bg;
+    position: absolute;
+    left: 7px;
+    top: -25px;
+    height: 110px;
+    width: 215px;
+    justify-content: center;
+    div {
+      color: #58616c;
+      font-size: 0.6rem;
+      margin-top: 5px;
+    }
+  }
+
+  .player-card {
+    z-index: 10;
+    div {
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 600;
+    }
+  }
+
+  .player-imgs {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+
+    img {
+      max-height: 55px;
+      min-height: 55px;
+      background-color: #3c4d54;
+      margin: 0 10px;
+    }
+  }
+
+  .prize-achievements {
+    max-height: $height/2;
+    min-height: $height/2;
+    width: 34%;
+  }
+
+  .prize-money {
+    background-color: #1e2832;
+    height: 30%;
+    color: #737b84;
+    border-bottom: 1px solid #414c5a;
+    div:first-child {
+      font-size: 0.75rem;
+    }
+    div:last-child {
+      color: white;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+  }
+
+  .achievements {
+    background-color: #263242;
+    height: 70%;
+    border-bottom: 1px solid #414c5a;
+    font-size: 0.8rem;
+    color: #737b84;
+    .item {
+      width: 80%;
+      margin: 5px 20px;
+      height: 20px;
+      line-height: 20px;
+      :last-child {
+        color: white;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.flex-cl {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-cl-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-rw {
+  display: flex;
+}
+
+.flex-rw-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1rem;
+}
